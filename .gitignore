@@ -1,0 +1,4 @@
+*.csv
+train_images/
+train_masks/
+.ipynb_checkpoints/
