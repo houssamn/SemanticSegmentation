@@ -63,10 +63,10 @@ if __name__ == "__main__":
     # test output size
     
     vgg_model = VGGNet()
-    input = torch.autograd.Variable(torch.randn(8, 3, 224, 224))
+    input = torch.autograd.Variable(torch.randn(8, 3, 700, 600))
     output = vgg_model(input)
     assert output['m5'].size() == torch.Size([8, 512, 7, 7])    
     
     fcn = FCN32s(vgg_model, 1)
     output = fcn(input)
-    assert output.size() == torch.Size([8, 1, 224, 224])
+    assert output.size() == torch.Size([8, 1, 700, 600])
