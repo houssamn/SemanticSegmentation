@@ -25,6 +25,7 @@ class MaskDataset(Dataset):
     def __getitem__(self, idx):
         image = cv2.imread(self.df.iloc[idx]['SavedImagePath']) 
         mask = cv2.imread(self.df.iloc[idx]['SavedMaskPath']) 
+        mask = np.round(mask[:, :, [0]]) # Select only 1 channel from the mask
         
         obj = {"image": image, "mask": mask}
 
@@ -79,6 +80,10 @@ class Rescale(object):
 
         img = cv2.resize(image, (new_w, new_h))
         msk = cv2.resize(mask, (new_w, new_h))
+        
+        # Add the dummy channel dimension to the mask
+        if(len(mask.shape) == 3 and len(msk.shape) == 2):
+            msk = msk[:, :, np.newaxis]
 
         return {'image': img, 'mask': msk}
 
@@ -124,5 +129,6 @@ class ToTensor(object):
         # numpy image: H x W x C
         # torch image: C X H X W
         image = image.transpose((2, 0, 1))
+        mask = mask.transpose((2, 0, 1))
 
         return {"image": torch.from_numpy(image).float(), "mask":torch.from_numpy(mask).float()}

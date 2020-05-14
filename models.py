@@ -36,6 +36,7 @@ class FCN32s(nn.Module):
         score = self.bn4(self.relu(self.deconv4(score)))  # size=(N, 64, x.H/2, x.W/2)
         score = self.bn5(self.relu(self.deconv5(score)))  # size=(N, 32, x.H, x.W)
         score = self.classifier(score)                    # size=(N, n_class, x.H/1, x.W/1)
+        score = nn.Sigmoid()(score)
 
         return score  # size=(N, n_class, x.H/1, x.W/1)
     
